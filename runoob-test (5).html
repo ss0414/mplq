@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>2024冬季音乐会门票领取</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .ticket-count {
+            font-size: 18px;
+            color: #dc3545;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #0d6efd;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .message {
+            display: none;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .success {
+            background: #d1e7dd;
+        }
+        .error {
+            background: #f8d7da;
+            color: #842029;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>2024冬季音乐会门票领取</h1>
+            <div class="ticket-count">
+                剩余门票数量：<span id="remainingTickets">350</span>
+            </div>
+        </div>
+
+        <form id="ticketForm">
+            <div class="form-group">
+                <label>姓名</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label>手机号</label>
+                <input type="tel" id="phone" pattern="[0-9]{11}" required>
+            </div>
+            <button type="submit">领取门票</button>
+        </form>
+
+        <div id="successMsg" class="message success">
+            <h2>尾号<span id="phoneEnd"></span>：恭喜您成功领取音乐会门票</h2>
+            <p>演出时间：2024年12月27日 19:00</p>
+            <p>演出地点：中国传媒大学南操场南侧地下一层多功能报告厅</p>
+            <p>入场凭证：演出当天凭本信息截图入场</p>
+        </div>
+
+        <div id="usedPhoneMsg" class="message error">
+            <h2>该手机号已领取过门票</h2>
+        </div>
+
+        <div id="soldOutMsg" class="message error">
+            <h2>抱歉，本次音乐会门票已全部领取完毕</h2>
+            <p>感谢您的关注，下次活动见。</p>
+        </div>
+    </div>
+
+    <script>
+        let remainingTickets = 350;
+        const usedPhones = new Set();
+        
+        document.getElementById('ticketForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const phone = document.getElementById('phone').value;
+        
+            if (!phone.match(/^[0-9]{11}$/)) {
+                alert('请输入正确的11位手机号');
+                return;
+            }
+        
+            if (usedPhones.has(phone)) {
+                document.getElementById('ticketForm').style.display = 'none';
+                document.getElementById('usedPhoneMsg').style.display = 'block';
+                return;
+            }
+        
+            if (remainingTickets <= 0) {
+                document.getElementById('ticketForm').style.display = 'none';
+                document.getElementById('soldOutMsg').style.display = 'block';
+                return;
+            }
+        
+            // 成功领取逻辑
+            remainingTickets--;
+            usedPhones.add(phone);
+            document.getElementById('remainingTickets').textContent = remainingTickets;
+            
+            // 显示成功信息
+            document.getElementById('ticketForm').style.display = 'none';
+            document.getElementById('phoneEnd').textContent = phone.slice(-4);
+            document.getElementById('successMsg').style.display = 'block';
+        });
+    </script>
+</body>
+
+</html>
